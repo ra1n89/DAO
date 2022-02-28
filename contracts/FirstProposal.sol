@@ -7,4 +7,8 @@ contract FirstProposal {
     function print() public view returns (string memory) {
         return message;
     }
+
+    function setMessage() public {
+        message = "Hack";
+    }
 }

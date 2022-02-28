@@ -28,6 +28,7 @@ contract DAO {
 
     mapping(uint256 => Proposal) public proposals;
     mapping(address => mapping(uint256 => bool)) isVoted;
+    mapping(uint256 => uint256) sharesForVote;
 
     constructor(address _voteToken) {
         chairPerson = msg.sender;
@@ -86,7 +87,7 @@ contract DAO {
 
     function finishProposal(uint256 _id) public {
         Proposal memory _proposal = proposals[_id];
-        uint256 supportEquity = (_proposal.votesSupport / totalShares) * 100;
+
         require(_proposal.voteEndTime < block.timestamp, "Auction is not over");
         // console.log(((totalShares * minimumQuorum) / 100));
         // console.log(_proposal.votes);
@@ -98,7 +99,10 @@ contract DAO {
             "Quorum isn't enough"
         );
         //minimum support votes cheking
-        require(supportEquity < 51, "Support votes isn't enough");
+        require(
+            _proposal.votesSupport > _proposal.votesAgainst,
+            "Support votes is less then against votes"
+        );
         _proposal.recipient.call(_proposal.callData);
     }
 }

@@ -37,13 +37,13 @@ describe("DAO", function () {
 
 
   it("addProposal: only chair person can add proposals", async function () {
-    const callData = firstProposal.interface.encodeFunctionData("print");
+    const callData = firstProposal.interface.encodeFunctionData("setMessage");
     const _description = "First"
     await expect(dao.connect(alice).addProposal(callData, firstProposal.address, _description)).to.be.revertedWith("only Chair Person can add proposals")
   });
 
   it("vote: checking that you are investor", async function () {
-    const callData = firstProposal.interface.encodeFunctionData("print");
+    const callData = firstProposal.interface.encodeFunctionData("setMessage");
     const amountToken = 1000;
     const _description = "First"
     await token.approve(dao.address, amountToken);
@@ -53,7 +53,7 @@ describe("DAO", function () {
   });
 
   it("vote: checking that voting for proposal can be done only one time", async function () {
-    const callData = firstProposal.interface.encodeFunctionData("print");
+    const callData = firstProposal.interface.encodeFunctionData("setMessage");
     const amountToken = 1000;
     const _description = "First"
     await token.approve(dao.address, amountToken);
@@ -64,7 +64,7 @@ describe("DAO", function () {
   });
 
   it("vote: checking that proposal id exists", async function () {
-    const callData = firstProposal.interface.encodeFunctionData("print");
+    const callData = firstProposal.interface.encodeFunctionData("setMessage");
     const amountToken = 1000;
     const _description = "First"
     await token.approve(dao.address, amountToken);
@@ -75,7 +75,7 @@ describe("DAO", function () {
   });
 
   it("finishProposal: checking that time is not over", async function () {
-    const callData = firstProposal.interface.encodeFunctionData("print");
+    const callData = firstProposal.interface.encodeFunctionData("setMessage");
     const _description = "First"
     const timeLock = (3 * 24 * 60 * 60) - 100;
     await token.approve(dao.address, 1100);
@@ -88,7 +88,7 @@ describe("DAO", function () {
   });
 
   it("finishProposal: checking that time is not over", async function () {
-    const callData = firstProposal.interface.encodeFunctionData("print");
+    const callData = firstProposal.interface.encodeFunctionData("setMessage");
     const _description = "First"
     const timeLock = (3 * 24 * 60 * 60)
     await token.approve(dao.address, 1100);
@@ -100,6 +100,25 @@ describe("DAO", function () {
     await dao.finishProposal(0);
   });
 
+  it("finishProposal: checking that time is not over", async function () {
+    const callData = firstProposal.interface.encodeFunctionData("setMessage");
+    const _description = "First";
+    const timeLock = (3 * 24 * 60 * 60);
+    const varAfterCall = "Hack";
+    await token.transfer(alice.address, 1000);
+    await token.approve(dao.address, 1100);
+    await token.connect(alice).approve(dao.address, 1100);
+    await dao.deposit(1000);
+    await dao.connect(alice).deposit(1000);
+    await dao.addProposal(callData, firstProposal.address, _description);
+    await dao.vote(0, true);
+    await dao.connect(alice).vote(0, true);
+    await network.provider.send("evm_increaseTime", [timeLock]);
+    await network.provider.send("evm_mine");
+    console.log(await firstProposal.print());
+    await dao.finishProposal(0);
+    expect(await firstProposal.print()).to.be.equal(varAfterCall);
+  });
 
 
 
