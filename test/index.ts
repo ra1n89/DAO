@@ -100,7 +100,7 @@ describe("DAO", function () {
     await dao.finishProposal(0);
   });
 
-  it("finishProposal: checking that time is not over", async function () {
+  it("finishProposal: checking that call works", async function () {
     const callData = firstProposal.interface.encodeFunctionData("setMessage");
     const _description = "First";
     const timeLock = (3 * 24 * 60 * 60);
@@ -119,7 +119,4 @@ describe("DAO", function () {
     await dao.finishProposal(0);
     expect(await firstProposal.print()).to.be.equal(varAfterCall);
   });
-
-
-
 })
