@@ -20,8 +20,6 @@ describe("DAO", function () {
     const Token = await ethers.getContractFactory("Token") as Token__factory;
     const DAO = await ethers.getContractFactory("DAO") as DAO__factory;
     const FirstProposal = await ethers.getContractFactory("FirstProposal") as FirstProposal__factory;
-    const _minimumQuorum = 100;
-    const _periodDuration = 10 * 24 * 60 * 60;
     token = await Token.deploy() as Token;
     await token.deployed();
     dao = await DAO.deploy(token.address) as DAO;

@@ -1,10 +1,14 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./Token.sol";
 
+/** @title Decantralized autonomous organization contract
+ * @dev users invest tokens and get a share to vote for proposals
+ * @author Rishat Akhmetzyanov
+ * @notice not for using in real projects beacause it's not properly audited
+ */
 contract DAO {
     address private chairPerson;
     Token private voteToken;
@@ -89,16 +93,11 @@ contract DAO {
         Proposal memory _proposal = proposals[_id];
 
         require(_proposal.voteEndTime < block.timestamp, "Auction is not over");
-        // console.log(((totalShares * minimumQuorum) / 100));
-        // console.log(_proposal.votes);
-        // console.log(_proposal.votesSupport);
-        // console.log(_proposal.description);
-        //minimum quorum cheking
         require(
             _proposal.votes < ((totalShares * minimumQuorum) / 100),
             "Quorum isn't enough"
         );
-        //minimum support votes cheking
+        //minimum support votes checking
         require(
             _proposal.votesSupport > _proposal.votesAgainst,
             "Support votes is less then against votes"
