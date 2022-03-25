@@ -1,12 +1,19 @@
-DAO smart contract
+# DAO smart contract
 
--Для участия в голосовании пользователям необходимо внести  токены для голосования. 
--Вывести токены с DAO, пользователи могут только после окончания всех голосований, в которых они участвовали. 
--Голосование может предложить только председатель.
--Для участия в голосовании пользователю необходимо внести депозит, один токен один голос. 
--Пользователь может участвовать в голосовании одними и теми же токенами, то есть пользователь внес 100 токенов он 
-может участвовать в голосовании №1 всеми 100 токенами и в голосовании №2 тоже всеми 100 токенами.
--Финишировать голосование может любой пользователь по прошествии определенного количества времени установленном в конструкторе.
+This project implements contract of decentralized autonomous organization, which allows investors to vote for any proposal with the share equal to invested amount 
+
+### Basic functions:
+
+Deposit - allows user to invest tokens and save the share of the user depending of his investment
+
+addProposal - chair Person can create proposals
+
+vote - allows user to vote for any added proposal
+
+finishProposal - any user can finish voting is time locking is over
 
 
+Verified contract:
 https://rinkeby.etherscan.io/address/0xeC8B6095b2CEa9Ce53e9a9BA7C6870F6567ED5e4#code
+
+P.S. not for using in real projects beacause it's not audited
